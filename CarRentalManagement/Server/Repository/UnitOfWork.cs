@@ -14,6 +14,7 @@ namespace CarRentalManagement.Server.Repository
         private IGenericRepository<Color> _colors;
         private IGenericRepository<Customer> _customers;
         private IGenericRepository<Booking> _bookings;
+        
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
@@ -42,10 +43,10 @@ namespace CarRentalManagement.Server.Repository
         {
             var user = httpContext.User.Identity.Name;
 
-            var entrie = _context.ChangeTracker.Entries()
+            var entries = _context.ChangeTracker.Entries()
                 .Where(q => q.State == EntityState.Modified || 
                     q.State == EntityState.Added);
-            foreach (var entry in entrie)
+            foreach (var entry in entries)
             {
                 ((BaseDomainModel)entry.Entity).DateUpdated = DateTime.Now;
                 ((BaseDomainModel)entry.Entity).UpdatedBy= user;
